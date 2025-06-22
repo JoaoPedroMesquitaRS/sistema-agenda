@@ -1,6 +1,65 @@
+import { CirclePlus, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 
 function AgendaPage(){
+
+    const [dadosAgendamento, setDadosAgendamento] = useState({
+        dia: '', horaAgendada: '', profissionalId: null, status: '', localId: null, pacienteId: null, observacoes: '', horaIncio: ''
+    });
+
+    // useEffect(() =>{
+    //     console.log('State do Agendamento:', dadosAgendamento);
+    // }, [dadosAgendamento]);
+
+    const handleAgendarClick = (hora) => {
+
+        const dadosAgendamento = {
+            diaSelecionado: dia,
+            horaSelecionada: hora,
+            profissionalId: profissionalSelecionadoId
+        };
+
+        setDadosAgendamento({
+            dia: dadosAgendamento.diaSelecionado,
+            horaAgendada: dadosAgendamento.horaSelecionada,
+            profissionalId: dadosAgendamento.profissionalId,
+            localId: localSelecionadoId
+        })
+
+        // console.log(dadosAgendamento);
+
+    };
+
+    /**************** PACIENTES *****************/
+
+    const [pacientes, setPacientes] = useState([]);
+    const [pacienteDigitado, setPacienteDigitado] = useState("");
+    const [pacienteId, setPacienteId] = useState("");
+
+    function handlePacienteDigitado(e){
+        setPacienteDigitado(e.target.value);
+    }
+
+    useEffect(() => {
+        // console.log(pacienteDigitado);
+        
+        async function fetchPacienteNome() {
+            if (pacienteDigitado.trim() === "") return; // evita chamadas vazias
+            try {
+                const response = await fetch(`http://localhost:3000/pacientes/busca?caracter=${pacienteDigitado}`);
+                const data = await response.json();
+                // console.log(data);
+                setPacientes(data);
+            } catch (error) {
+                console.error("Erro ao buscar paciente:", error);
+            }
+        }
+
+        fetchPacienteNome();
+
+    }, [pacienteDigitado]);
+
+    /*********************************/
 
     /**************** PROFISSIONAIS *****************/
     
@@ -15,12 +74,23 @@ function AgendaPage(){
         fetchProfissionais();
     }, [])
 
+    
     // Seta o ID com o option selecionado
     const [profissionalSelecionadoId, setProfissionalSelecionadoId] = useState("");
-    function handleChangeProfissionalId(e){
-        setProfissionalSelecionadoId(e.target.value);
-    }
 
+    function handleChangeProfissionalId(e){
+
+        const selectedOption = e.target.options[e.target.selectedIndex];
+        let localId = selectedOption.getAttribute('data-localid');
+        // console.log(localId)
+
+        setProfissionalSelecionadoId(e.target.value);
+        setLocalSelecionadoId(localId)
+    }
+    
+    // useEffect(() =>{
+    //     console.log(profissionais.localId);
+    // }, [profissionais]);
     /*********************************/
 
     // const horarios = ['08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00'];
@@ -32,9 +102,9 @@ function AgendaPage(){
 
     const [dia, setDia] = useState("");
 
-    useEffect(() => {
-        console.log(dia)
-    }, [dia])
+    // useEffect(() => {
+    //     console.log(dia)
+    // }, [dia])
 
     function handleDiaSelecionado(e){
         setDia(e.target.value);
@@ -49,12 +119,72 @@ function AgendaPage(){
     async function btnClick() {
         try{
             const response = await fetch(`http://localhost:3000/consultas/${profissionalSelecionadoId}/${dia}`).then(res => (res.json()));
-            console.log(response);
+            // console.log(response);
             setConsultasAgendadas(response);
         } catch(error){
             console.log('Erro', error);
         }
     }
+
+
+
+    /**************** PROFISSIONAIS *****************/
+    const [localSelecionadoId, setLocalSelecionadoId] = useState(null);
+
+    // useState(() => {
+    //     console.log(localSelecionadoId);
+    // }, [localSelecionadoId])
+    
+    // const [consulta, setConsulta] = useState({
+    //     pacienteId: "", profissionalId: "", localId: localSelecionadoId, dia: "", horaAgendada: "", horaInicio: "", status: "", observacoes: ""
+    // }, []);
+    
+    // function agendar(consulta){
+
+    // }
+
+    // 
+
+    /********************************************* */
+    const [mostrarModal, setMostrarModal] = useState(false);
+
+    const abrirModal = () => setMostrarModal(true);
+    const fecharModal = () => setMostrarModal(false);
+
+    /******************** FETCH AGENDAR CONSULTA ******************** */
+    async function fetchAgendar() {
+        try{
+            const response = await fetch('http://localhost:3000/consultas',{
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify(dadosAgendamento)
+            });
+            
+            const resultado = response.json();
+            // console.log('Resposta do servidor: ', resultado)
+        } catch(error){
+            console.log('Erro ao enviar agendamento:', error);
+        }
+    }
+
+    /*********************/
+    /******************** FETCH DELETAR CONSULTA ******************** */
+    async function fetchDeletar(id) {
+        try{
+            const response = await fetch(`http://localhost:3000/consultas/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-type': 'application/json'
+                }
+            }).then(res => (res.json()));
+            // console.log('Sucesso:', response);
+        } catch(error){
+            console.log('Erro:', error);
+        }
+    };
+
 
     return (
         <div className="bg-slate-300 flex flex-col items-center gap-16 p-8">
@@ -76,6 +206,7 @@ function AgendaPage(){
                                     <option 
                                         value={profissional.id}
                                         key={profissional.id}
+                                        data-localid={profissional.localId}
                                     >
                                         {profissional.nome}
                                     </option>
@@ -107,15 +238,20 @@ function AgendaPage(){
                                     <th className="py-3 px-4 text-left font-semibold">Nome</th>
                                     <th className="py-3 px-4 text-left font-semibold">Idade</th>
                                     <th className="py-3 px-4 text-left font-semibold">Status</th>
+                                    <th className="py-3 px-4 text-left font-semibold"></th>
                                 </tr>
                             </thead>
                             <tbody className="text-gray-700">
                                 {horarios.map((hora) => {
                                     const consulta = consultasAgendadas.find(c => c.horaAgendada === hora);
                                     const ocupado = !!consulta;
+                                    // console.log(consulta);
                                     
                                     return (
-                                        <tr key={hora} className={`border border-slate-300 hover:bg-gray-50 transition-colors ${ocupado ? 'bg-slate-200' : 'bg-slate-100'}`}>
+                                        <tr 
+                                            key={hora}
+                                            data-consulta-id = {ocupado ? consulta.id : undefined} 
+                                            className={`border border-slate-300 hover:bg-gray-50 transition-colors ${ocupado ? 'bg-slate-200' : 'bg-slate-100'}`}>
                                             <td className="py-3 px-4 border-gray-300">{hora}</td>
                                             <td 
                                                 className="border-slate-300 border py-3 px-4"
@@ -132,6 +268,24 @@ function AgendaPage(){
                                                     {ocupado ? 'Agendado' : 'Livre'}
                                                 </span>
                                             </td>
+                                            <td className="flex justify-center mt-3">
+                                                {ocupado ?(
+                                                 <Trash 
+                                                    onClick={async () => {
+                                                        await fetchDeletar(consulta.id);
+                                                        // console.log(consulta.id);
+                                                        btnClick();
+                                                    }}
+                                                 /> 
+                                                ) : ( 
+                                                <CirclePlus 
+                                                    onClick={() => {
+                                                        handleAgendarClick(hora);
+                                                        abrirModal()
+                                                    }}/>
+                                                )
+                                                }
+                                            </td>
                                         </tr>
                                     );
                                 })}
@@ -140,6 +294,125 @@ function AgendaPage(){
                     </div>
                 </div>
             </div>
+
+            {mostrarModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center">
+                <div 
+                    className="absolute inset-0 bg-black bg-opacity-50"
+                    onClick={fecharModal} // Adicione esta função para fechar ao clicar fora
+                ></div>
+                
+                <div className="relative z-10 bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+                    <div className="p-6">
+                        <h3 className="text-lg font-bold mb-4">Agendar Consulta</h3>
+                        
+                        <form>
+                            <div className="mb-4">
+                                <label className="block text-gray-700 mb-2">Paciente</label>
+                                <input 
+                                    type="text" 
+                                    className="w-full px-3 py-2 border border-gray-300 rounded"
+                                    placeholder="Nome do paciente"
+                                    name="pacienteDigitado"
+                                    value={pacienteDigitado}
+                                    onChange={handlePacienteDigitado}
+                                />
+                                <div className="flex">
+                                    
+                                        {Array.isArray(pacientes) && pacientes.length > 0 ? (
+                                            pacientes.map((paciente) => (
+                                                <span 
+                                                    key={paciente.id} 
+                                                    className="w-full px-3 border border-gray-300"
+                                                    onClick={() => {
+                                                        setPacienteDigitado(paciente.nome);
+                                                        setPacientes([]);
+                                                        setPacienteId(paciente.id)
+                                                        setDadosAgendamento(prev => ({
+                                                            ...prev,
+                                                            pacienteId: paciente.id,
+                                                        }));
+                                                    }}
+                                                >
+                                                    {paciente.nome}
+                                                </span>
+                                            ))
+                                        ) : (
+                                            <span className="px-3 text-sm text-gray-500">Nenhum paciente encontrado</span>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="mb-4">
+                                <label className="block text-gray-700 mb-2">Paciente ID</label>
+                                <div className="flex gap-2">
+                                    {pacienteId}
+                                </div>
+                            </div>
+
+                            <div className="mb-4">
+                                <label className="block text-gray-700 mb-2">Profissional ID</label>
+                                <div className="flex gap-2">
+                                    {dadosAgendamento.profissionalId}
+                                </div>
+                            </div>
+
+                            <div className="mb-4">
+                                <label className="block text-gray-700 mb-2">Local ID</label>
+                                <div className="flex gap-2">
+                                    {localSelecionadoId}
+                                </div>
+                            </div>
+
+                            <div className="mb-4">
+                                <label className="block text-gray-700 mb-2">Data e Hora</label>
+                                <div className="flex gap-2">
+                                    {`${dadosAgendamento.diaSelecionado} - ${dadosAgendamento.horaSelecionada}`}
+                                </div>
+                            </div>
+
+                            
+                            <div className="mb-4">
+                                <label className="block text-gray-700 mb-2">Observações</label>
+                                <textarea 
+                                    className="w-full px-3 py-2 border border-gray-300 rounded"
+                                    rows="3"
+                                ></textarea>
+                            </div>
+                            
+                            <div className="flex justify-end gap-3">
+                                <button
+                                    type="button"
+                                    onClick={fecharModal}
+                                    className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                                >
+                                    Cancelar
+                                </button>
+                                <button
+                                    type="button"
+                                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                                    onClick={async () => {
+                                        setDadosAgendamento(prev => ({
+                                            ...prev,
+                                            profissionalId: dadosAgendamento.profissionalId,
+                                            localId: localSelecionadoId,
+                                            dia: dadosAgendamento.diaSelecionado,
+                                            horaAgendada: dadosAgendamento.horaSelecionada,
+                                            status: 'Agendada',
+                                        }));
+                                        await fetchAgendar();
+                                        await btnClick();
+                                        fecharModal();
+                                    }}
+                                >
+                                    Confirmar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>)}
+
         </div>
     );
 }

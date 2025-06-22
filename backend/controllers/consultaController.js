@@ -58,3 +58,20 @@ export async function buscarConsulta(req, res) {
         res.status(500).json(error)
     }
 };
+
+// Deletar Consulta
+export async function deletarConsulta(req, res) {
+    try{
+        const { id } = req.params;
+
+        const quantidadeExcluida = await Consulta.destroy({where: {id}});
+
+        if(quantidadeExcluida === 0){
+            res.status(400).json({error: 'Consulta não localizada!'});
+        }
+        res.status(200).json({message: 'Consulta excluida com sucesso!'});
+
+    } catch(error){
+        res.status(500).json({error: error.message})
+    }
+}

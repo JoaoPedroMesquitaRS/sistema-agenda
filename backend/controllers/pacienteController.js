@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import Paciente from '../models/Paciente.js';
 
 export async function criarPaciente(req, res) {  
@@ -63,3 +64,27 @@ export async function listarPacientesId(req, res) {
         res.status(500).json(error)
     }
 };
+
+// Buscar Paciente por letra
+export async function buscarNome(req, res) {
+    const { caracter } = req.query;
+
+    try {
+        const listaPaciente = await Paciente.findAll({
+            where: {
+                nome: {
+                    [Op.like]: `${caracter}%` // começa com o que foi digitado
+                }
+            }
+        });
+
+        if (!listaPaciente || listaPaciente.length === 0) {
+            return res.status(404).json({ error: 'Paciente não localizado!' });
+        }
+
+        res.status(200).json(listaPaciente);
+
+    } catch (error) {
+        res.status(500).json({ error: 'Erro ao buscar paciente.' });
+    }
+}

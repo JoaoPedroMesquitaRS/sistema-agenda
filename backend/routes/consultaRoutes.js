@@ -1,5 +1,5 @@
 import express from 'express';
-import { buscarConsulta, criarConsulta, deletarConsulta, listarConsulta } from '../controllers/consultaController.js';
+import { alterarConsultaStatus, buscarConsulta, criarConsulta, deletarConsulta, listarConsulta } from '../controllers/consultaController.js';
 
 const router = express.Router()
 
@@ -9,5 +9,8 @@ router.delete('/:id', deletarConsulta)
 
 // BUSCAR CONSULTAS POR PROFISSIONAL [id]
 router.get('/:profissionalId/:dia', buscarConsulta);
+
+// 
+router.put('/:id', alterarConsultaStatus);
 
 export default router;

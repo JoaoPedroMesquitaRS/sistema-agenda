@@ -39,10 +39,6 @@ const Consulta = sequelize.define('Consulta', {
         type: DataTypes.STRING,
         allowNull: true
     },
-    horaInicio: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
     status: {
         type: DataTypes.STRING,
         allowNull: false,

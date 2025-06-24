@@ -75,3 +75,25 @@ export async function deletarConsulta(req, res) {
         res.status(500).json({error: error.message})
     }
 }
+
+// Alterar Status para Atendido
+export async function alterarConsultaStatus(req, res) {
+    try{
+        const { id } = req.params;
+        const { status } = req.body;
+    
+        const [quantidadeAtualizada] = await Consulta.update(
+            {
+                status
+            },
+            {where: {id}}
+        );
+    
+        if(quantidadeAtualizada === 0){
+                return res.status(400).json({error: `Consulta não localizada!`});
+        }
+        res.status(200).json({message: 'Consulta alterada com sucesso!'});
+    } catch(error){
+        res.status(500).json({error: error.message});
+    }
+};

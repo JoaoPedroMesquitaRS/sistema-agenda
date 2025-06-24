@@ -119,7 +119,7 @@ function EspecialidadePage(){
         <div className="bg-slate-300 flex flex-col items-center gap-16 p-8">
             <h1 className="font-bold text-3xl">Criar / Editar Especialidade</h1>
 
-            <div className="shadow rounded-sm bg-white w-3/4 p-8">
+            <div className="shadow rounded-sm bg-white w-11/12 p-8">
                 <span className="font-bold text-lg">Preencha os campos:</span>
                 <div className="flex flex-col p-8 gap-6">
                     {/* Seleção de local existente */}

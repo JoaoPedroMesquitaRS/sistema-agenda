@@ -12,6 +12,7 @@ import ProfissionalPage from './pages/ProfissionalPage.jsx';
 import AgendaPage from './pages/AgendaPage.jsx';
 import AtendimentoPage from './pages/AtendimentoPage.jsx';
 import HomePage from './pages/HomePage.jsx';
+import UsuarioPage from './pages/UsuarioPage.jsx';
 
 // Layout
 import AppLayout from './components/AppLayout.jsx';
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
       { path: 'profissional', element: <ProfissionalPage /> },
       { path: 'agenda', element: <AgendaPage /> },
       { path: 'atendimento', element: <AtendimentoPage /> },
+      { path: 'usuario', element: <UsuarioPage /> }
     ],
   },
 ]);

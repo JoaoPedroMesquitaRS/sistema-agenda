@@ -16,22 +16,35 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="w-64 h-screen bg-gray-800 text-white p-4 shadow-lg fixed left-0 top-0">
-      <h2 className="text-2xl font-bold mb-8">Sistema Agenda</h2>
-      <nav className="space-y-3">
-        {menu.map(({ to, label, icon }) => (
-          <Link
-            key={to}
-            to={to}
-            className={`flex items-center space-x-3 p-2 rounded hover:bg-gray-700 transition-colors ${
-              pathname === to ? 'bg-gray-700' : ''
-            }`}
-          >
-            {icon}
-            <span>{label}</span>
-          </Link>
-        ))}
-      </nav>
+    <div className="w-64 h-screen bg-gray-800 text-white p-4 shadow-lg fixed left-0 top-0 flex flex-col">
+      <div>
+        <h2 className="text-2xl font-bold mb-8">Sistema Agenda</h2>
+        <nav className="space-y-3">
+          {menu.map(({ to, label, icon }) => (
+            <Link
+              key={to}
+              to={to}
+              className={`flex items-center space-x-3 p-2 rounded hover:bg-gray-700 transition-colors ${
+                pathname === to ? 'bg-gray-700' : ''
+              }`}
+            >
+              {icon}
+              <span>{label}</span>
+            </Link>
+          ))}
+        </nav>
+      </div>
+      
+      <div className="mt-auto mb-4"> {/* mt-auto empurra para baixo */}
+        <Link
+          to={'/usuario'}
+          className={`flex items-center space-x-3 p-2 rounded hover:bg-gray-700 transition-colors ${
+            pathname === '/usuario' ? 'bg-gray-700' : ''}`}
+        >
+          <Settings size={20} />
+          <span>Usuários</span>
+        </Link>
+      </div>
     </div>
   );
 };

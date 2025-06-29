@@ -2,11 +2,17 @@ import { useEffect, useState } from "react";
 
 function UsuarioPage(){
 
+    const token = localStorage.getItem('token');
+
     const [usuarios, setUsuarios] = useState([]);
 
     useEffect( () => {
         async function fetchUsuarios() {
-            const response = await fetch('http://localhost:3000/usuarios').then(res => (res.json()));
+            const response = await fetch('http://localhost:3000/usuarios', {
+                headers:{
+                    Authorization: `Bearer ${token}`
+                }
+            }).then(res => (res.json()));
             setUsuarios(response);
         }
         fetchUsuarios();
@@ -45,7 +51,8 @@ function UsuarioPage(){
             const response = await fetch(`http://localhost:3000/usuarios/${usuarioSelecionadoId}`,{
                 method: 'DELETE',
                 headers: {
-                    'Content-type': 'application/json'
+                    'Content-type': 'application/json',
+                    Authorization: `Bearer ${token}`
                 }
             });
             alert('Usuário excluído com sucesso!')
@@ -81,7 +88,8 @@ function UsuarioPage(){
             const response = await fetch(url, {
                 method: method,
                 headers: {
-                    'Content-type': 'application/json'
+                    'Content-type': 'application/json',
+                    Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify(usuarioDigitado)
             }).then(res => (res.json()));

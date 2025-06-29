@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 function AtendimentoPage(){
 
+    const token = localStorage.getItem('token');
+
     const location = useLocation();
     const navigate = useNavigate()
 ;    
@@ -45,7 +47,8 @@ function AtendimentoPage(){
         const response = await fetch('http://localhost:3000/prontuarios', {
             method: 'POST',
             headers: {
-                'Content-type': 'application/json'
+                'Content-type': 'application/json',
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify(dados)
         }).then(res => (res.json()));
@@ -59,7 +62,8 @@ function AtendimentoPage(){
         const response = await fetch(`http://localhost:3000/consultas/${pacienteConsultaId}`, {
             method: 'PUT',
             headers: {
-                'Content-type': 'application/json'
+                'Content-type': 'application/json',
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify({status})
         }).then(res => (res.json()));

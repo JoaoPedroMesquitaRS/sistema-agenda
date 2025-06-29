@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 
 function AgendaPage(){
 
+    const token = localStorage.getItem('token');
+
     const navigate = useNavigate()
     
     const [dadosAgendamento, setDadosAgendamento] = useState({
@@ -50,7 +52,11 @@ function AgendaPage(){
         async function fetchPacienteNome() {
             if (pacienteDigitado.trim() === "") return; // evita chamadas vazias
             try {
-                const response = await fetch(`http://localhost:3000/pacientes/busca?caracter=${pacienteDigitado}`);
+                const response = await fetch(`http://localhost:3000/pacientes/busca?caracter=${pacienteDigitado}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
                 const data = await response.json();
                 // console.log(data);
                 setPacientes(data);
@@ -71,7 +77,11 @@ function AgendaPage(){
     const [profissionais, setProfissionais] = useState([]);
     useEffect(() => {
         async function fetchProfissionais() {
-            const response = await fetch('http://localhost:3000/profissionais').then(res => (res.json()));
+            const response = await fetch('http://localhost:3000/profissionais', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }).then(res => (res.json()));
             setProfissionais(response);
         }
 
@@ -124,7 +134,11 @@ function AgendaPage(){
 
     async function btnClick() {
         try{
-            const response = await fetch(`http://localhost:3000/consultas/${profissionalSelecionadoId}/${dia}`).then(res => (res.json()));
+            const response = await fetch(`http://localhost:3000/consultas/${profissionalSelecionadoId}/${dia}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }).then(res => (res.json()));
             // console.log(response);
             setConsultasAgendadas(response);
             setCarregarAgenda(true);
@@ -174,7 +188,8 @@ function AgendaPage(){
             const response = await fetch('http://localhost:3000/consultas',{
                 method: 'POST',
                 headers: {
-                    'Content-type': 'application/json'
+                    'Content-type': 'application/json',
+                    Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify(dadosAgendamento)
             });
@@ -193,7 +208,8 @@ function AgendaPage(){
             const response = await fetch(`http://localhost:3000/consultas/${id}`, {
                 method: 'DELETE',
                 headers: {
-                    'Content-type': 'application/json'
+                    'Content-type': 'application/json',
+                    Authorization: `Bearer ${token}`
                 }
             }).then(res => (res.json()));
             // console.log('Sucesso:', response);

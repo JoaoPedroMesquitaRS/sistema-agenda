@@ -9,11 +9,17 @@ function EspecialidadePage(){
         descricao: ""
     });
 
+  const token = localStorage.getItem('token');
+
     // Buscar Especialidades
     useEffect(() => {
         async function fetchEspecialidades() {
             try{
-                const response = await fetch('http://localhost:3000/especialidades');
+                const response = await fetch('http://localhost:3000/especialidades', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
                 const especialidades = await response.json();
                 setEspecialidades(especialidades);
             } catch(error){
@@ -64,11 +70,17 @@ function EspecialidadePage(){
         const response = await fetch(`http://localhost:3000/especialidades/${especialidadeSelecionadaId}`, {
             method: 'DELETE',
             headers: {
-                'Content-type': 'application/json'
+                'Content-type': 'application/json',
+                Authorization: `Bearer ${token}`
+
             }
         });
 
-        const novasEspecialidades = await fetch('http://localhost:3000/especialidades').then(res => (res.json()));
+        const novasEspecialidades = await fetch('http://localhost:3000/especialidades', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }).then(res => (res.json()));
         setEspecialidades(novasEspecialidades);
 
     }
@@ -87,7 +99,8 @@ function EspecialidadePage(){
             const response = await fetch(url, {
                 method,
                 headers: {
-                    'Content-type': 'application/json'
+                    'Content-type': 'application/json',
+                    Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify(especialidadeSelecionada)
             })
@@ -101,7 +114,11 @@ function EspecialidadePage(){
             alert(modoAlterar ? "Especialidade alterada com sucesso!" : "Especialidade criada com sucesso!");
 
             // Carrega a lista de Especialidades atualizada
-            const novasEspecialidades = await fetch('http://localhost:3000/especialidades').then(res => res.json());
+            const novasEspecialidades = await fetch('http://localhost:3000/especialidades', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }).then(res => res.json());
             setEspecialidades(novasEspecialidades);
 
             // Limpa os inputs

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 
 function ProfissionalPage(){
 
+    const token = localStorage.getItem('token');
+
     /********************* +++++++++ PROFISSIONAIS +++++++++ *****************************/
 
     const [profissionais, setProfissionais] = useState([]);
@@ -10,7 +12,11 @@ function ProfissionalPage(){
     useEffect(() => {
         async function fetchProfissional() {
             try{
-                const profissionaisResponse = await fetch('http://localhost:3000/profissionais').then(res => (res.json()));
+                const profissionaisResponse = await fetch('http://localhost:3000/profissionais', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }).then(res => (res.json()));
                 setProfissionais(profissionaisResponse);
             } catch(error){
                 console.log("Erro", error);
@@ -59,7 +65,11 @@ function ProfissionalPage(){
     useEffect(() => {
         async function fetchEspecialidades() {
             try{
-                const response = await fetch('http://localhost:3000/especialidades').then(res => (res.json()));
+                const response = await fetch('http://localhost:3000/especialidades', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }).then(res => (res.json()));
                 setEspecialidades(response);
                 console.log(response);
             }catch(error){
@@ -89,7 +99,11 @@ function ProfissionalPage(){
         // console.log("especialidadeId:", especialidadeId);
         async function fetchEspecialidadeId() {
             try{
-                const especialidade = await fetch(`http://localhost:3000/especialidades/${especialidadeId}`).then(res => res.json());
+                const especialidade = await fetch(`http://localhost:3000/especialidades/${especialidadeId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }).then(res => res.json());
             } catch {
                 console.log('Erro');
             }
@@ -108,7 +122,11 @@ function ProfissionalPage(){
     useEffect(() => {
         async function fetchLocais() {
             try{
-                const response = await fetch('http://localhost:3000/locais').then(res => (res.json()));
+                const response = await fetch('http://localhost:3000/locais', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }).then(res => (res.json()));
                 setLocais(response);
                 console.log(response);
             }catch(error){
@@ -138,7 +156,11 @@ function ProfissionalPage(){
         async function fetchLocalId() {
     
             try{
-                const local = await fetch(`http://localhost:3000/locais/${localId}`).then(res => res.json());
+                const local = await fetch(`http://localhost:3000/locais/${localId}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }).then(res => res.json());
             } catch {
                 console.log('Erro');
             }
@@ -174,14 +196,19 @@ function ProfissionalPage(){
         const confirmacao = window.confirm("Deseja realmente excluir este profissional?");
         if (!confirmacao) return;
         
-        const response = await fetch(`http://localhost:3000/profissionais/${profissionalSelecionadoId}`, {
+        const response = await fetch(`http://localhost:3000/profissionais/${profissionalSelecionadoId},`, {
             method: 'DELETE',
             headers: {
-                'Content-type': 'application/json'
+                'Content-type': 'application/json',
+                Authorization: `Bearer ${token}`
             }
         });
 
-        const novosProfissionais = await fetch('http://localhost:3000/profissionais').then(res => (res.json()));
+        const novosProfissionais = await fetch('http://localhost:3000/profissionais', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }).then(res => (res.json()));
         setProfissionais(novosProfissionais);
 
     }
@@ -199,7 +226,8 @@ function ProfissionalPage(){
             const response = await fetch(url, {
                 method,
                 headers: {
-                    'Content-type': 'application/json'
+                    'Content-type': 'application/json',
+                    Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify(profissionalSelecionado)
             })
@@ -210,7 +238,11 @@ function ProfissionalPage(){
             console.log('Erro', error);
         }
 
-        const novosProfissionais = await fetch('http://localhost:3000/profissionais').then(res => (res.json()));
+        const novosProfissionais = await fetch('http://localhost:3000/profissionais', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }).then(res => (res.json()));
         setProfissionais(novosProfissionais);
         
     }

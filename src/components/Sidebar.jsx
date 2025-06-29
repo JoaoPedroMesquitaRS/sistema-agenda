@@ -1,8 +1,13 @@
 // components/Sidebar.jsx
-import { Home, Calendar, Users, Settings, MapPin, BriefcaseMedical } from 'lucide-react';
+import { Home, Calendar, Users, Settings, MapPin, BriefcaseMedical, LogOutIcon } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
 const Sidebar = () => {
+
+  function handleLogout() {
+      localStorage.removeItem('token');
+  }
+
   const { pathname } = useLocation();
 
   const menu = [
@@ -36,6 +41,17 @@ const Sidebar = () => {
       </div>
       
       <div className="mt-auto mb-4"> {/* mt-auto empurra para baixo */}
+
+        <Link 
+        to={'/login'}
+          className='flex items-center space-x-3 p-2 rounded text-red-500 hover:bg-gray-700 transition-colors cursor-pointer'
+          onClick={handleLogout}  
+        >
+          
+          <LogOutIcon size={20} />
+          <span>Logout</span>  
+        </Link>
+
         <Link
           to={'/usuario'}
           className={`flex items-center space-x-3 p-2 rounded hover:bg-gray-700 transition-colors ${

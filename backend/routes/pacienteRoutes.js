@@ -1,13 +1,16 @@
 import { alterarPaciente, buscarNome, criarPaciente, excluirPaciente, listarPacientes, listarPacientesId } from '../controllers/pacienteController.js';
 import express from 'express';
+import { autenticarToken } from '../middlewares/auth.js';
 
 const router = express.Router();
 
-router.get('/', listarPacientes);
-router.get('/busca', buscarNome);
-router.get('/:id', listarPacientesId);
-router.post('/', criarPaciente);
-router.put('/:id', alterarPaciente);
-router.delete('/:id', excluirPaciente);
+router.get('/', autenticarToken, listarPacientes);
+router.get('/busca', autenticarToken, buscarNome);
+router.get('/:id', autenticarToken, listarPacientesId);
+router.post('/', autenticarToken, criarPaciente);
+router.put('/:id', autenticarToken, alterarPaciente);
+
+// AUTH OK
+router.delete('/:id', autenticarToken, excluirPaciente);
 
 export default router;

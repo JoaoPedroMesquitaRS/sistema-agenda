@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 
 function PacientePage(){
 
+    const token = localStorage.getItem('token');
+
     const [pacientes, setPacientes] = useState([]);
     const [pacienteSelecionadoId, setPacienteSelecionadoId] = useState("");
     const [pacienteSelecionado, setPacienteSelecionado] = useState({
@@ -16,7 +18,11 @@ function PacientePage(){
     useEffect(() => {
         async function fecthPacientes() {
             try{
-               const response = await fetch('http://localhost:3000/pacientes').then(res => (res.json()));
+               const response = await fetch('http://localhost:3000/pacientes', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+               }).then(res => (res.json()));
                 setPacientes(response);
             } catch(error){
                 console.error('Erro ao buscar Pacientes', error);
@@ -73,12 +79,17 @@ function PacientePage(){
             const response = await fetch(`http://localhost:3000/pacientes/${pacienteSelecionadoId}`, {
                 method: 'DELETE',
                 headers: {
-                    'Content-type': 'application/json'
+                    'Content-type': 'application/json',
+                    Authorization: `Bearer ${token}`
                 }
             })
             alert('Paciente excluído com sucesso!')
         
-            const novosPacientes = await fetch('http://localhost:3000/pacientes').then(res => (res.json()));
+            const novosPacientes = await fetch('http://localhost:3000/pacientes', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }).then(res => (res.json()));
             setPacientes(novosPacientes);
 
         } catch{
@@ -99,7 +110,8 @@ function PacientePage(){
             const response = await fetch(url, {
                 method,
                 headers: {
-                    'Content-type': 'application/json'
+                    'Content-type': 'application/json',
+                    Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify(pacienteSelecionado)
             });
@@ -111,7 +123,11 @@ function PacientePage(){
             alert(modoAlterar ? 'Paciente alterado com sucesso!' : 'Paciente criado com sucesso!');
 
             // Carrega a lista de Pacientes atualizada
-            const novosPacientes = await fetch('http://localhost:3000/pacientes').then(res => (res.json()));
+            const novosPacientes = await fetch('http://localhost:3000/pacientes', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }).then(res => (res.json()));
             setPacientes(novosPacientes);
 
             // Limpa os inputs

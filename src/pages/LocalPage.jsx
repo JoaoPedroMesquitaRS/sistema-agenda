@@ -9,11 +9,17 @@ function LocalPage() {
     rota: ""
   });
 
+  const token = localStorage.getItem('token');
+
   // Buscar locais ao carregar
   useEffect(() => {
     async function fetchLocais() {
       try {
-        const response = await fetch("http://localhost:3000/locais");
+        const response = await fetch("http://localhost:3000/locais", {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
         const dados = await response.json();
         setLocais(dados);
       } catch (error) {
@@ -66,11 +72,16 @@ function LocalPage() {
         const response = await fetch(`http://localhost:3000/locais/${localSelecionadoId}`, {
             method: 'DELETE',
             headers: {
-                'Content-type': 'application/json'
+                'Content-type': 'application/json',
+                Authorization: `Bearer ${token}`
             }
         });
 
-        const novosLocais = await fetch('http://localhost:3000/locais').then(res => (res.json()));
+        const novosLocais = await fetch('http://localhost:3000/locais', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }).then(res => (res.json()));
         setLocais(novosLocais);
 
     }
@@ -89,7 +100,8 @@ function LocalPage() {
       const response = await fetch(url, {
         method,
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify(localSelecionado)
       });
@@ -103,7 +115,11 @@ function LocalPage() {
       alert(modoAlterar ? "Local atualizado com sucesso!" : "Local criado com sucesso!");
       
       // Recarregar locais após ação
-      const novosLocais = await fetch("http://localhost:3000/locais").then(res => res.json());
+      const novosLocais = await fetch("http://localhost:3000/locais", {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }).then(res => res.json());
       setLocais(novosLocais);
 
       // Resetar formulário

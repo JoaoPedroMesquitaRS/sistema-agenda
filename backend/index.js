@@ -3,6 +3,7 @@ import cors from 'cors';
 import sequelize from './config/database.js';
 
 // Rotas
+import loginRoutes from './routes/loginRoutes.js';
 import pacienteRoutes from './routes/pacienteRoutes.js';
 import profissionalRoutes from './routes/profissionalRoutes.js';
 import especialidadeRoutes from './routes/especialidadeRoutes.js';
@@ -27,6 +28,7 @@ app.use(cors());
 app.use(express.json());
 
 // Rotas
+app.use('/login', loginRoutes);
 app.use('/pacientes', pacienteRoutes);
 app.use('/profissionais', profissionalRoutes);
 app.use('/especialidades', especialidadeRoutes);

@@ -5,6 +5,7 @@ import './index.css'
 
 // Pages
 import App from './App.jsx'
+import LoginPage from './pages/LoginPage.jsx';
 import LocalPage from './pages/LocalPage.jsx';
 import EspecialidadePage from './pages/EspecialidadePage.jsx';
 import PacientePage from './pages/PacientePage.jsx';
@@ -23,6 +24,7 @@ const router = createBrowserRouter([
     element: <AppLayout />,
     children: [
       { path: '/', element: <HomePage /> },
+      { path: '/login', element: <LoginPage /> },
       { path: 'local', element: <LocalPage /> },
       { path: 'especialidade', element: <EspecialidadePage /> },
       { path: 'paciente', element: <PacientePage /> },

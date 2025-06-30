@@ -2,7 +2,7 @@
 
 Este é um projeto simples para agendamentos voltado para a área de saúde.
 
-## 🚀 Tecnologias Utilizadas
+### 🚀 Tecnologias Utilizadas
 
 - **Frontend:** React, Tailwind CSS
 - **Backend:** Node.js, Express
@@ -11,7 +11,7 @@ Este é um projeto simples para agendamentos voltado para a área de saúde.
 
 ---
 
-## 🔐 Funcionalidades Implementadas
+### 🔐 Funcionalidades Implementadas
 
 - Login com autenticação JWT
 - Criação de usuários, profissionais, locais, especialidades, agendas e prontuários
@@ -20,9 +20,9 @@ Este é um projeto simples para agendamentos voltado para a área de saúde.
 
 ---
 
-##  💻 Como Executar o Projeto
+###  💻 Como Executar o Projeto
 
-### 1. Backend
+#### 1. Backend
 
 ```bash
 cd backend
@@ -30,14 +30,14 @@ npm install
 npx nodemon index.js
 ```
 
-### 2. Frontend
+#### 2. Frontend
 
 ```bash
 npm install
 npm run dev
 ```
 
-## 🎯 Objetivo do Projeto
+### 🎯 Objetivo do Projeto
 
 Este projeto foi desenvolvido como parte do meu processo de aprendizado em React e integração com back-end. O foco foi entender:
 
@@ -49,7 +49,7 @@ Este projeto foi desenvolvido como parte do meu processo de aprendizado em React
 
 ---
 
-## 🧠 O que aprendi
+### 🧠 O que aprendi
 
 - Criar e organizar componentes em React
 - Proteger rotas no front-end
@@ -60,23 +60,23 @@ Este projeto foi desenvolvido como parte do meu processo de aprendizado em React
 
 ---
 
-## 📷 Imagens do Projeto
+### 📷 Imagens do Projeto
 
-### Tela de Início
+#### Tela de Início
 ![Tela de Início](./assets/home.png)
 
-### Tela de Profissionais
+#### Tela de Profissionais
 ![Tela de Profissionais](./assets/profissional.png)
 
-### Tela de Agenda
+#### Tela de Agenda
 ![Tela de Agenda](./assets/agenda.png)
 
-### Tela de Atendimento
+#### Tela de Atendimento
 ![Tela de Atendimento](./assets/atendimento.png)
 
 ---
 
-## 📚 Próximos Passos (futuros)
+### 📚 Próximos Passos (futuros)
 
 - Criar uma área administrativa com mais permissões
 - Implementar a funcionalidade completa de agendamento de consultas
@@ -86,14 +86,14 @@ Este projeto foi desenvolvido como parte do meu processo de aprendizado em React
 
 ---
 
-## 📌 Status
+### 📌 Status
 
 ✅ Projeto pausado após atingir o objetivo principal de aprendizado com React e autenticação.  
 📦 Código mantido como referência para futuros projetos ou reativações.
 
 ---
 
-## 📬 Contato
+### 📬 Contato
 
 [João Pedro Mesquita](https://www.linkedin.com/in/jope-msquita/)  
 Estudante de Análise e Desenvolvimento de Sistemas  
